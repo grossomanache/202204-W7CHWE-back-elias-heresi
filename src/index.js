@@ -1,5 +1,5 @@
 require("dotenv").config();
-const debug = require("debug")("egomaniac:root");
+const debug = require("debug")("trapperz:root");
 const chalk = require("chalk");
 const connectDB = require("./database");
 const { startServer } = require("./server");
