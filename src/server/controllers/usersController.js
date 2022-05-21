@@ -6,7 +6,7 @@ const encryptPassword = (password) => bcrypt.hash(password, 10);
 
 const registerUser = async (req, res, next) => {
   const { username, name, password } = req.body;
-  const user = await User.findOne({ username });
+  const user = User.findOne({ username: username.toString() });
   if (user) {
     const error = new Error();
     error.code = 409;

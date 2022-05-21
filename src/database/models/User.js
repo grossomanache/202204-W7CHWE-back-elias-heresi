@@ -31,7 +31,7 @@ const UserSchema = new Schema(
   },
   {
     toObject: {
-      transform: (document, returnObject) => {
+      transform: (null, returnObject) => {
         returnObject.id = returnObject._id;
         delete returnObject.__v;
         delete returnObject._id;
