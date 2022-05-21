@@ -1,12 +1,13 @@
 const bcrypt = require("bcrypt");
 const debug = require("debug")("trapperz:server:controllers");
+const jwt = require("jsonwebtoken");
 const User = require("../../database/models/User");
 
 const encryptPassword = (password) => bcrypt.hash(password, 10);
 
 const registerUser = async (req, res, next) => {
   const { username, name, password } = req.body;
-  const user = User.findOne({ username: username.toString() });
+  const user = User.findOne({ username });
   if (user) {
     const error = new Error();
     error.code = 409;
@@ -34,4 +35,22 @@ const registerUser = async (req, res, next) => {
   }
 };
 
-module.exports = { registerUser };
+const loginUser = async (req, res) => {
+  const { username, password } = req.body;
+  debug(req.body);
+  const user = await User.findOne({ username });
+  if (!user) {
+    res.status(400).json({ msg: "User not found" });
+    return;
+  }
+  const correctPassword = await bcrypt.compare(password, user.password);
+  if (!correctPassword) {
+    res.status(401).json({ msg: "Incorrect username and/or password" });
+    return;
+  }
+
+  const token = jwt.sign({ id: user.username }, process.env.JWT_SECRET);
+  res.status(200).json({ token });
+};
+
+module.exports = { registerUser, loginUser };
