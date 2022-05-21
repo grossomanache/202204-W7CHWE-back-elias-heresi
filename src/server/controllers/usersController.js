@@ -11,7 +11,6 @@ const registerUser = async (req, res, next) => {
     const error = new Error();
     error.code = 409;
     error.customMessage = "Username already exists";
-
     next(error);
   }
   const encryptedPassword = await encryptPassword(password);
@@ -22,6 +21,7 @@ const registerUser = async (req, res, next) => {
       username,
       password: encryptedPassword,
     });
+    debug(newUser);
 
     res
       .status(201)
