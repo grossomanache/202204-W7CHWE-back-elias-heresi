@@ -1,9 +1,4 @@
-const {
-  mockedUser,
-  mockedRegister,
-  mockedLogin,
-  mockedRealLogin,
-} = require("../mocks/mocks");
+const { mockedUser, mockedRegister, mockedLogin } = require("../mocks/mocks");
 const { registerUser, loginUser } = require("./usersController");
 
 const expectedToken =
@@ -12,13 +7,12 @@ const expectedToken =
 jest.mock("bcrypt", () => ({
   ...jest.requireActual("bcrypt"),
   hash: () => mockedUser.password,
-  compare: () => jest.fn().mockRejectedValueOnce(true),
+  compare: () => jest.fn().mockResolvedValueOnce(true),
 }));
 
 jest.mock("../../database/models/User", () => ({
-  findOne: () =>
-    jest.fn().mockReturnValueOnce(false).mockRejectedValueOnce(mockedRealLogin),
-  create: () => jest.fn().mockResolvedValue(mockedRegister),
+  findOne: jest.fn().mockReturnValueOnce(false).mockReturnValueOnce(true),
+  create: jest.fn().mockResolvedValue(mockedRegister),
 }));
 
 jest.mock("jsonwebtoken", () => ({
