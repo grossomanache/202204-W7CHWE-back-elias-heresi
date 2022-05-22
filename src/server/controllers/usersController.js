@@ -57,4 +57,10 @@ const loginUser = async (req, res) => {
   res.status(200).json({ token });
 };
 
-module.exports = { registerUser, loginUser };
+const getUsers = async (req, res) => {
+  const users = await User.find({});
+  debug(`${users.length} users were retrieved`);
+  res.status(200).json(users);
+};
+
+module.exports = { registerUser, loginUser, getUsers };
