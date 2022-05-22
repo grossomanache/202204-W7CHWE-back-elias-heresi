@@ -6,17 +6,18 @@ const User = require("../../database/models/User");
 const encryptPassword = (password) => bcrypt.hash(password, 10);
 
 const registerUser = async (req, res, next) => {
-  const username = req.body.username.toString();
   const name = req.body.name.toString();
+  const username = req.body.username.toString();
   const password = req.body.password.toString();
-
-  const user = User.findOne({ username });
+  const user = await User.findOne({ username });
   if (user) {
     const error = new Error();
     error.code = 409;
-    error.customMessage = "Username already exists";
+    error.message = "Username already exists";
     next(error);
+    return;
   }
+
   const encryptedPassword = await encryptPassword(password);
 
   try {

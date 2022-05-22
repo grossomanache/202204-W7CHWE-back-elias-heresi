@@ -40,8 +40,11 @@
     "helmet": "^5.1.0",
     "jest": "^28.1.0",
     "jsonwebtoken": "^8.5.1",
+    "mongodb-memory-server": "^8.5.2",
     "mongoose": "^6.3.4",
     "mongoose-type-url": "^2.1.0",
-    "morgan": "^1.10.0"
+    "morgan": "^1.10.0",
+    "msw": "^0.41.0",
+    "supertest": "^6.2.3"
   }
 }
