@@ -29,7 +29,6 @@ const registerUser = async (req, res, next) => {
       friends: [],
       enemies: [],
     });
-    debug(newUser);
 
     res
       .status(201)
