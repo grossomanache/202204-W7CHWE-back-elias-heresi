@@ -25,6 +25,9 @@ const registerUser = async (req, res, next) => {
       name,
       username,
       password: encryptedPassword,
+      image: "https://cdn.sanjosedemaipo.cl/home/images/no-user-image-icon.jpg",
+      friends: [],
+      enemies: [],
     });
     debug(newUser);
 
