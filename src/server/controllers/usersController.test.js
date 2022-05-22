@@ -1,5 +1,10 @@
-const { mockedUser, mockedRegister, mockedLogin } = require("../mocks/mocks");
-const { registerUser, loginUser } = require("./usersController");
+const {
+  mockedUser,
+  mockedRegister,
+  mockedLogin,
+  mockedAuthenticationRequest,
+} = require("../mocks/mocks");
+const { registerUser, loginUser, getUsers } = require("./usersController");
 
 const expectedToken =
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjJwYWMiLCJpYXQiOjE2NTMxNjUxNzl9.JmE1DCHI8c5LIdfSclkMEp_Y8xOVI6dsyVqwWtIeyuE";
@@ -13,6 +18,7 @@ jest.mock("bcrypt", () => ({
 jest.mock("../../database/models/User", () => ({
   findOne: jest.fn().mockReturnValueOnce(false).mockReturnValueOnce(true),
   create: jest.fn().mockResolvedValue(mockedRegister),
+  find: jest.fn().mockResolvedValue([mockedUser]),
 }));
 
 jest.mock("jsonwebtoken", () => ({
@@ -55,7 +61,27 @@ describe("Given the loginUser function", () => {
       await loginUser(req, res);
 
       expect(res.status).toHaveBeenCalledWith(expectedStatus);
-      expect(res.json).toHaveBeenLastCalledWith({ token: expectedToken });
+      expect(res.json).toHaveBeenCalledWith({ token: expectedToken });
+    });
+  });
+});
+
+describe("Given the getUsers function", () => {
+  describe("When instantiated with a valid authentication", () => {
+    test("Then a response with status 200 and an array of users will be received", async () => {
+      const req = mockedAuthenticationRequest;
+      const expectedStatus = 200;
+      const expectedJson = [mockedUser];
+
+      const res = {
+        status: jest.fn().mockReturnThis(),
+        json: jest.fn(),
+      };
+
+      await getUsers(req, res);
+
+      expect(res.status).toHaveBeenCalledWith(expectedStatus);
+      expect(res.json).toHaveBeenCalledWith(expectedJson);
     });
   });
 });
