@@ -18,7 +18,7 @@ const UserSchema = new Schema(
       required: true,
     },
     image: {
-      type: Buffer,
+      type: String,
     },
     friends: {
       type: [Schema.Types.ObjectId],
